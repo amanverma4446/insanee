@@ -1,10 +1,32 @@
 <section class="product-v2">
-  <div class="gallery">
-    {% for image in product.images %}
-      <div class="gallery-img">
-        {{ image | image_url: width: 1400 | image_tag: loading: 'lazy', alt: image.alt | default: product.title | escape }}
+  <div class="product-slider" data-product-slider>
+    <div class="slider-main">
+      {% for image in product.images %}
+        <div class="slide{% if forloop.first %} is-active{% endif %}" data-slide="{{ forloop.index0 }}">
+          {{ image | image_url: width: 1600 | image_tag: loading: forloop.first | default: 'lazy', alt: image.alt | default: product.title | escape }}
+        </div>
+      {% endfor %}
+      {% if product.images.size > 1 %}
+        <button type="button" class="slider-arrow slider-prev" aria-label="Previous image">‹</button>
+        <button type="button" class="slider-arrow slider-next" aria-label="Next image">›</button>
+        <div class="slider-count"><span data-current>1</span> / {{ product.images.size }}</div>
+      {% endif %}
+    </div>
+
+    {% if product.images.size > 1 %}
+      <div class="slider-thumbs" role="tablist">
+        {% for image in product.images %}
+          <button type="button" class="slider-thumb{% if forloop.first %} is-active{% endif %}" data-thumb="{{ forloop.index0 }}" aria-label="View image {{ forloop.index }}">
+            {{ image | image_url: width: 240 | image_tag: loading: 'lazy', alt: image.alt | default: product.title | escape }}
+          </button>
+        {% endfor %}
       </div>
-    {% endfor %}
+      <div class="slider-dots">
+        {% for image in product.images %}
+          <button type="button" class="slider-dot{% if forloop.first %} is-active{% endif %}" data-dot="{{ forloop.index0 }}" aria-label="Go to image {{ forloop.index }}"></button>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 
   <div class="p-info">
@@ -17,20 +39,16 @@
         <label class="form-label" for="ProductVariant">Select option</label>
         <select id="ProductVariant" name="id">
           {% for v in product.variants %}
-            <option value="{{ v.id }}" {% unless v.available %}disabled{% endunless %}>
-              {{ v.title }} — {{ v.price | money }}
-            </option>
+            <option value="{{ v.id }}" {% unless v.available %}disabled{% endunless %}>{{ v.title }} — {{ v.price | money }}</option>
           {% endfor %}
         </select>
       {% else %}
         <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
       {% endunless %}
-
       <div class="qty">
         <label for="ProductQuantity">Quantity</label>
         <input id="ProductQuantity" name="quantity" type="number" min="1" value="1">
       </div>
-
       <button class="btn gold full" type="submit" {% unless product.available %}disabled{% endunless %}>
         {% if product.available %}Add to Bag{% else %}Sold Out{% endif %}
       </button>
@@ -43,10 +61,46 @@
     </div>
 
     {% if product.description != blank %}
-      <div class="p-desc">
-        <div class="p-desc-label">DETAILS</div>
-        {{ product.description }}
-      </div>
+      <div class="p-desc"><div class="p-desc-label">DETAILS</div>{{ product.description }}</div>
     {% endif %}
   </div>
 </section>
+
+<script>
+(function(){
+  function initSlider(root){
+    if(root.dataset.sliderReady) return;
+    root.dataset.sliderReady='true';
+    const slides=[...root.querySelectorAll('.slide')];
+    if(!slides.length) return;
+    const thumbs=[...root.querySelectorAll('[data-thumb]')];
+    const dots=[...root.querySelectorAll('[data-dot]')];
+    const current=root.querySelector('[data-current]');
+    let index=0;
+    let startX=0;
+    function show(i){
+      index=(i+slides.length)%slides.length;
+      slides.forEach((s,n)=>s.classList.toggle('is-active',n===index));
+      thumbs.forEach((b,n)=>b.classList.toggle('is-active',n===index));
+      dots.forEach((b,n)=>b.classList.toggle('is-active',n===index));
+      if(current) current.textContent=index+1;
+      if(thumbs[index]) thumbs[index].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+    }
+    root.querySelector('.slider-prev')?.addEventListener('click',()=>show(index-1));
+    root.querySelector('.slider-next')?.addEventListener('click',()=>show(index+1));
+    thumbs.forEach(b=>b.addEventListener('click',()=>show(Number(b.dataset.thumb))));
+    dots.forEach(b=>b.addEventListener('click',()=>show(Number(b.dataset.dot))));
+    root.addEventListener('touchstart',e=>{startX=e.changedTouches[0].clientX},{passive:true});
+    root.addEventListener('touchend',e=>{
+      const dx=e.changedTouches[0].clientX-startX;
+      if(Math.abs(dx)>45) show(index+(dx<0?1:-1));
+    },{passive:true});
+    document.addEventListener('keydown',e=>{
+      if(!root.closest('body')) return;
+      if(e.key==='ArrowLeft') show(index-1);
+      if(e.key==='ArrowRight') show(index+1);
+    });
+  }
+  document.querySelectorAll('[data-product-slider]').forEach(initSlider);
+})();
+</script>
