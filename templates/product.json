@@ -1,1 +1,1 @@
-{"sections":{"main":{"type":"sarviums-product","settings":{}}},"order":["main"]}
+{"sections":{"main":{"type":"sarviums-v2-product","settings":{}},"related":{"type":"sarviums-v2-related","settings":{}}},"order":["main","related"]}
