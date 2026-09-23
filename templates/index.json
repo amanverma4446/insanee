@@ -1,1 +1,16 @@
-{"sections":{"hero":{"type":"sarviums-hero","settings":{}},"collections":{"type":"sarviums-collections","settings":{}},"featured":{"type":"sarviums-featured","settings":{"title":"Curated Favourites","collection":"all","products_to_show":8}},"story":{"type":"sarviums-story","settings":{}}},"order":["hero","collections","featured","story"]}
+{
+  "sections": {
+    "hero": {"type":"sarviums-hero","settings":{}},
+    "collections": {"type":"sarviums-collections","settings":{}},
+    "featured": {
+      "type":"sarviums-featured",
+      "settings": {
+        "title":"Best Sellers",
+        "collection":"all",
+        "products_to_show":8
+      }
+    },
+    "story": {"type":"sarviums-story","settings":{}}
+  },
+  "order":["hero","collections","featured","story"]
+}
