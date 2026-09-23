@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('form[action="/cart/add"]').forEach(f=>f.addEventListener('submit',()=>{setTimeout(()=>location.reload(),700)}));});
