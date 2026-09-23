@@ -6,6 +6,7 @@
 <title>{% if page_title %}{{ page_title }} · {% endif %}{{ shop.name }}</title>
 {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
 {{ content_for_header }}
+{{ 'sarviums-v2.css' | asset_url | stylesheet_tag }}
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap');
 :root{--paper:#f5f0e7;--ink:#171513;--gold:#b68a43;--muted:#756f66}
