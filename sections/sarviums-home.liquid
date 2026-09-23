@@ -1,0 +1,62 @@
+<section class="sv-hero">
+  <div class="sv-hero-copy">
+    <p class="sv-kicker">SARVIUMS · BEYOND ORDINARY</p>
+    <h1>Jewellery that<br><em>goes beyond.</em></h1>
+    <p class="sv-lead">Elevated artificial jewellery designed for weddings, celebrations and every moment worth dressing for.</p>
+    <a class="sv-button" href="{{ routes.collections_url }}">SHOP THE COLLECTION</a>
+  </div>
+  <div class="sv-hero-mark"><span>S</span></div>
+</section>
+
+<section class="sv-intro">
+  <p class="sv-kicker">THE SARVIUMS EDIT</p>
+  <h2>Find your signature.</h2>
+  <p>Statement pieces, refined details and effortless glamour.</p>
+</section>
+
+<section class="sv-products">
+  {% assign all_products = collections.all.products %}
+  {% if all_products.size > 0 %}
+    {% for product in all_products limit: 8 %}
+      <a class="sv-card" href="{{ product.url }}">
+        <div class="sv-card-image">
+          {% if product.featured_image %}
+            {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
+          {% else %}
+            <div class="sv-placeholder">S</div>
+          {% endif %}
+        </div>
+        <div class="sv-card-info">
+          <h3>{{ product.title }}</h3>
+          <span>{{ product.price | money }}</span>
+        </div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <div class="sv-empty">Your products will appear here once they are available in the store.</div>
+  {% endif %}
+</section>
+
+<section class="sv-story">
+  <div>
+    <p class="sv-kicker">BEYOND ORDINARY</p>
+    <h2>Made for the moments<br>you remember.</h2>
+  </div>
+  <p>SARVIUMS brings together expressive jewellery and timeless elegance — pieces made to become part of your story.</p>
+</section>
+
+<section class="sv-newsletter">
+  <p class="sv-kicker">STAY IN THE KNOW</p>
+  <h2>Something beautiful is coming.</h2>
+  {% form 'customer' %}
+    <input type="email" name="contact[email]" placeholder="Email address" required>
+    <button type="submit">JOIN</button>
+  {% endform %}
+</section>
+
+{% schema %}
+{
+  "name": "SARVIUMS Homepage",
+  "settings": []
+}
+{% endschema %}
