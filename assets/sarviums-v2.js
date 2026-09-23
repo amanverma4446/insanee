@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{const t=document.querySelector('.mobile-toggle'),n=document.querySelector('.mobile-nav');if(t&&n)t.addEventListener('click',()=>n.classList.toggle('open'));});
