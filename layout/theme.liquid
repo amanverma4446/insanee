@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% if page_title %}{{ page_title }}{% if current_page != 1 %} – Page {{ current_page }}{% endif %} – {% endif %}{{ shop.name }}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | escape }}">{% endif %}
+  {{ content_for_header }}
+  {{ 'sarviums.css' | asset_url | stylesheet_tag }}
+</head>
+<body>
+  <div class="announcement">SARVIUMS — Beyond Ordinary <span>•</span> Complimentary shipping on orders $75+</div>
+  <header class="site-header">
+    <div class="header-inner">
+      <button class="mobile-menu" type="button" aria-label="Open menu">☰</button>
+      <a class="brand" href="{{ routes.root_url }}">
+        <span class="brand-name">SARVIUMS</span>
+        <span class="brand-tagline">Beyond Ordinary</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="{{ routes.root_url }}">Home</a>
+        <a href="{{ routes.collections_url }}">Shop</a>
+        <a href="{{ routes.search_url }}">Search</a>
+      </nav>
+      <a class="cart-link" href="{{ routes.cart_url }}">Bag <span id="cart-count">({{ cart.item_count }})</span></a>
+    </div>
+  </header>
+  <main id="MainContent">{{ content_for_layout }}</main>
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div><div class="footer-brand">SARVIUMS</div><p>Beyond Ordinary. Jewellery designed to make every occasion feel exceptional.</p></div>
+      <div><h4>Shop</h4><a href="{{ routes.collections_url }}">All Jewellery</a><a href="{{ routes.search_url }}">Search</a></div>
+      <div><h4>Customer Care</h4><a href="/pages/contact">Contact</a><a href="/policies/shipping-policy">Shipping</a><a href="/policies/refund-policy">Returns</a></div>
+    </div>
+    <div class="footer-bottom">© {{ 'now' | date: '%Y' }} SARVIUMS. All rights reserved.</div>
+  </footer>
+  {{ 'sarviums.js' | asset_url | script_tag }}
+</body>
+</html>
