@@ -5,42 +5,67 @@
     <p>Discover the complete SARVIUMS collection.</p>
   </div>
 
-  {% assign categories = 'Necklaces|necklace;Earrings|earring;Bangles|bangle' | split: ';' %}
-  {% for category in categories %}
-    {% assign parts = category | split: '|' %}
-    {% assign category_name = parts[0] %}
-    {% assign keyword = parts[1] %}
-    {% assign category_count = 0 %}
+  <div class="shop-filters" role="tablist" aria-label="Jewellery categories">
+    <button class="shop-filter is-active" type="button" data-filter="all">All</button>
+    <button class="shop-filter" type="button" data-filter="necklace">Necklaces</button>
+    <button class="shop-filter" type="button" data-filter="earring">Earrings</button>
+    <button class="shop-filter" type="button" data-filter="bangle">Bangles</button>
+  </div>
+
+  <div class="products shop-filter-grid" data-shop-grid>
     {% for product in collections.all.products %}
       {% assign title = product.title | downcase %}
-      {% if title contains keyword %}
-        {% assign category_count = category_count | plus: 1 %}
+      {% assign category = 'other' %}
+      {% if title contains 'necklace' %}{% assign category = 'necklace' %}
+      {% elsif title contains 'earring' %}{% assign category = 'earring' %}
+      {% elsif title contains 'bangle' %}{% assign category = 'bangle' %}
       {% endif %}
-    {% endfor %}
 
-    {% if category_count > 0 %}
-      <div class="shop-category">
-        <div class="section-head split">
-          <h2>{{ category_name }}</h2>
+      <a class="card shop-product" data-category="{{ category }}" href="{{ product.url }}">
+        <div class="card-img">
+          {% if product.featured_image %}
+            {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
+          {% else %}
+            <div class="sv-placeholder">S</div>
+          {% endif %}
         </div>
-        <div class="products">
-          {% for product in collections.all.products %}
-            {% assign title = product.title | downcase %}
-            {% if title contains keyword %}
-              <a class="card" href="{{ product.url }}">
-                <div class="card-img">
-                  {% if product.featured_image %}
-                    {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
-                  {% else %}
-                    <div class="sv-placeholder">S</div>
-                  {% endif %}
-                </div>
-                <div class="card-meta"><h3>{{ product.title }}</h3><span>{{ product.price | money }}</span></div>
-              </a>
-            {% endif %}
-          {% endfor %}
+        <div class="card-meta">
+          <h3>{{ product.title }}</h3>
+          <span>{{ product.price | money }}</span>
         </div>
-      </div>
-    {% endif %}
-  {% endfor %}
+      </a>
+    {% endfor %}
+  </div>
+
+  <p class="shop-empty" data-shop-empty hidden>No products found in this category.</p>
 </section>
+
+<script>
+(function(){
+  const root = document.querySelector('.shop-all-page');
+  if (!root || root.dataset.filterReady) return;
+  root.dataset.filterReady = 'true';
+
+  const buttons = root.querySelectorAll('[data-filter]');
+  const products = root.querySelectorAll('.shop-product');
+  const empty = root.querySelector('[data-shop-empty]');
+
+  function filter(category){
+    let visible = 0;
+    products.forEach(product => {
+      const show = category === 'all' || product.dataset.category === category;
+      product.hidden = !show;
+      if(show) visible++;
+    });
+    buttons.forEach(button => {
+      const active = button.dataset.filter === category;
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    if(empty) empty.hidden = visible !== 0;
+  }
+
+  buttons.forEach(button => button.addEventListener('click', () => filter(button.dataset.filter)));
+  filter('all');
+})();
+</script>
