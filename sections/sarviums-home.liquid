@@ -1,7 +1,10 @@
 <section class="sv-hero">
+  {% assign banner_product = collections.all.products.first %}
   <div class="sv-hero-image">
     {% if section.settings.hero_image %}
       {{ section.settings.hero_image | image_url: width: 2200 | image_tag: loading: 'eager', alt: 'SARVIUMS jewellery' }}
+    {% elsif banner_product.featured_image %}
+      {{ banner_product.featured_image | image_url: width: 2200 | image_tag: loading: 'eager', alt: banner_product.title }}
     {% else %}
       <div class="sv-hero-placeholder"><span>SARVIUMS</span></div>
     {% endif %}
@@ -10,7 +13,7 @@
     <p class="sv-kicker">SARVIUMS · BEYOND ORDINARY</p>
     <h1>Jewellery that<br><em>goes beyond.</em></h1>
     <p class="sv-lead">Elevated artificial jewellery designed for weddings, celebrations and every moment worth dressing for.</p>
-    <a class="sv-button" href="{{ collections['necklaces'].url | default: routes.collections_url }}">SHOP NECKLACES</a>
+    <a class="sv-button" href="{{ routes.collections_url }}">SHOP NECKLACES</a>
   </div>
 </section>
 
@@ -21,26 +24,18 @@
 </section>
 
 <section class="sv-products">
-  {% assign necklaces = collections['necklaces'] %}
-  {% if necklaces and necklaces.products_count > 0 %}
-    {% for product in necklaces.products limit: 8 %}
+  {% assign shown = 0 %}
+  {% for product in collections.all.products %}
+    {% assign title = product.title | downcase %}
+    {% if title contains 'necklace' and shown < 8 %}
       <a class="sv-card" href="{{ product.url }}">
-        <div class="sv-card-image">
-          {% if product.featured_image %}
-            {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
-          {% else %}
-            <div class="sv-placeholder">S</div>
-          {% endif %}
-        </div>
-        <div class="sv-card-info">
-          <h3>{{ product.title }}</h3>
-          <span>{{ product.price | money }}</span>
-        </div>
+        <div class="sv-card-image">{% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}{% endif %}</div>
+        <div class="sv-card-info"><h3>{{ product.title }}</h3><span>{{ product.price | money }}</span></div>
       </a>
-    {% endfor %}
-  {% else %}
-    <div class="sv-empty">Necklaces will appear here once they are added to the Necklaces collection.</div>
-  {% endif %}
+      {% assign shown = shown | plus: 1 %}
+    {% endif %}
+  {% endfor %}
+  {% if shown == 0 %}<div class="sv-empty">Necklaces will appear here once necklace products are added.</div>{% endif %}
 </section>
 
 <section class="sv-story">
