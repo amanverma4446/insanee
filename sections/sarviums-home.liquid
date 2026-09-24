@@ -15,9 +15,9 @@
 </section>
 
 <section class="sv-products">
-  {% assign all_products = collections.all.products %}
-  {% if all_products.size > 0 %}
-    {% for product in all_products limit: 8 %}
+  {% assign necklaces = collections['necklaces'] %}
+  {% if necklaces and necklaces.products_count > 0 %}
+    {% for product in necklaces.products limit: 8 %}
       <a class="sv-card" href="{{ product.url }}">
         <div class="sv-card-image">
           {% if product.featured_image %}
@@ -33,7 +33,7 @@
       </a>
     {% endfor %}
   {% else %}
-    <div class="sv-empty">Your products will appear here once they are available in the store.</div>
+    <div class="sv-empty">Necklaces will appear here once they are added to the Necklaces collection.</div>
   {% endif %}
 </section>
 
