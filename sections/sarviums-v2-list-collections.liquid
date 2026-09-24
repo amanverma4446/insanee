@@ -9,7 +9,7 @@
   {% assign earrings = collections['earrings'] %}
   {% assign bangles = collections['bangles'] %}
 
-  {% if necklaces and necklaces.products_count > 0 %}
+  {% if necklaces %}
     <div class="shop-category">
       <div class="section-head split">
         <h2>Necklaces</h2>
@@ -26,7 +26,7 @@
     </div>
   {% endif %}
 
-  {% if earrings and earrings.products_count > 0 %}
+  {% if earrings %}
     <div class="shop-category">
       <div class="section-head split">
         <h2>Earrings</h2>
@@ -43,7 +43,7 @@
     </div>
   {% endif %}
 
-  {% if bangles and bangles.products_count > 0 %}
+  {% if bangles %}
     <div class="shop-category">
       <div class="section-head split">
         <h2>Bangles</h2>
