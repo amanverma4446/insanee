@@ -1,11 +1,17 @@
 <section class="sv-hero">
+  <div class="sv-hero-image">
+    {% if section.settings.hero_image %}
+      {{ section.settings.hero_image | image_url: width: 2200 | image_tag: loading: 'eager', alt: 'SARVIUMS jewellery' }}
+    {% else %}
+      <div class="sv-hero-placeholder"><span>SARVIUMS</span></div>
+    {% endif %}
+  </div>
   <div class="sv-hero-copy">
     <p class="sv-kicker">SARVIUMS · BEYOND ORDINARY</p>
     <h1>Jewellery that<br><em>goes beyond.</em></h1>
     <p class="sv-lead">Elevated artificial jewellery designed for weddings, celebrations and every moment worth dressing for.</p>
-    <a class="sv-button" href="{{ routes.collections_url }}">SHOP THE COLLECTION</a>
+    <a class="sv-button" href="{{ collections['necklaces'].url | default: routes.collections_url }}">SHOP NECKLACES</a>
   </div>
-  <div class="sv-hero-mark"><span>S</span></div>
 </section>
 
 <section class="sv-intro">
@@ -57,6 +63,12 @@
 {% schema %}
 {
   "name": "SARVIUMS Homepage",
-  "settings": []
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Homepage banner image"
+    }
+  ]
 }
 {% endschema %}
