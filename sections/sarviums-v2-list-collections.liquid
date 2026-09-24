@@ -5,28 +5,58 @@
     <p>Discover the complete SARVIUMS collection.</p>
   </div>
 
-  <div class="collection-toolbar">
-    <span>{{ collections['all'].products_count }} pieces</span>
-  </div>
+  {% assign necklaces = collections['necklaces'] %}
+  {% assign earrings = collections['earrings'] %}
+  {% assign bangles = collections['bangles'] %}
 
-  {% paginate collections['all'].products by 24 %}
-    <div class="products">
-      {% for product in collections['all'].products %}
-        <a class="card" href="{{ product.url }}">
-          <div class="card-img">
-            {% if product.featured_image %}
-              {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}
-            {% else %}
-              <div class="sv-placeholder">S</div>
-            {% endif %}
-          </div>
-          <div class="card-meta">
-            <h3>{{ product.title }}</h3>
-            <span>{{ product.price | money }}</span>
-          </div>
-        </a>
-      {% endfor %}
+  {% if necklaces and necklaces.products_count > 0 %}
+    <div class="shop-category">
+      <div class="section-head split">
+        <h2>Necklaces</h2>
+        <a class="text-link" href="{{ necklaces.url }}">View all</a>
+      </div>
+      <div class="products">
+        {% for product in necklaces.products %}
+          <a class="card" href="{{ product.url }}">
+            <div class="card-img">{% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}{% else %}<div class="sv-placeholder">S</div>{% endif %}</div>
+            <div class="card-meta"><h3>{{ product.title }}</h3><span>{{ product.price | money }}</span></div>
+          </a>
+        {% endfor %}
+      </div>
     </div>
-    <div class="shop-pagination">{{ paginate | default_pagination }}</div>
-  {% endpaginate %}
+  {% endif %}
+
+  {% if earrings and earrings.products_count > 0 %}
+    <div class="shop-category">
+      <div class="section-head split">
+        <h2>Earrings</h2>
+        <a class="text-link" href="{{ earrings.url }}">View all</a>
+      </div>
+      <div class="products">
+        {% for product in earrings.products %}
+          <a class="card" href="{{ product.url }}">
+            <div class="card-img">{% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}{% else %}<div class="sv-placeholder">S</div>{% endif %}</div>
+            <div class="card-meta"><h3>{{ product.title }}</h3><span>{{ product.price | money }}</span></div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if bangles and bangles.products_count > 0 %}
+    <div class="shop-category">
+      <div class="section-head split">
+        <h2>Bangles</h2>
+        <a class="text-link" href="{{ bangles.url }}">View all</a>
+      </div>
+      <div class="products">
+        {% for product in bangles.products %}
+          <a class="card" href="{{ product.url }}">
+            <div class="card-img">{% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}{% else %}<div class="sv-placeholder">S</div>{% endif %}</div>
+            <div class="card-meta"><h3>{{ product.title }}</h3><span>{{ product.price | money }}</span></div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 </section>
